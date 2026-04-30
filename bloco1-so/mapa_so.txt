@@ -187,5 +187,5 @@ local.d               sasl2
 # A apresentação mostrou que o supervisor controlava o acesso a I/O
 # e que rotinas de dispositivo traduziam comandos.
 # Em qual diretório do Linux você reconhece essa função?
-/dev
-Resposta:
+
+Resposta: /dev
