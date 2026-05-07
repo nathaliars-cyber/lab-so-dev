@@ -26,17 +26,25 @@ ps aux (primeiras linhas)
 # Cole a saída dos comandos e responda:
 
 sleep 5m &
-  PID do filho: 
+  PID do filho: 86
 
 cat /proc/[FILHO]/status | grep -E "Pid|PPid|State"
-  [cole aqui]
+State:  S (sleeping)
+Pid:    86
+PPid:   47
+TracerPid:      0
 
 ps -o pid,ppid,stat,cmd (antes do kill)
-  [cole aqui]
+   PID  PPID STAT CMD
+   47     1 Ss   sh -l
+   86    47 S    sleep 5m
+   89    47 R+   ps -o pid,ppid,stat,cmd
 
 ps -o pid,ppid,stat,cmd (depois do kill)
-  [cole aqui]
-
+  PID  PPID STAT CMD
+  47     1 Ss   sh -l
+  91    47 R+   ps -o pid,ppid,stat,cmd
+ 
 
 # PARTE C — Questões de síntese
 
@@ -45,7 +53,7 @@ ps -o pid,ppid,stat,cmd (depois do kill)
 #    O que esse encadeamento sugere sobre como os processos sao
 #    criados no Linux?
 
-Resposta 1:
+Resposta 1:Esse encadeamento sugere que os processos são organizados de forma hierarca 
 
 
 # 2. O arquivo /proc/<PID>/status mostra o campo State com uma letra
@@ -53,4 +61,4 @@ Resposta 1:
 #    o que aconteceu com o processo filho? O que isso te faz pensar  
 #    sobre a vida de um processo?
 
-Resposta 2:
+Resposta 2: O processo filho foi excluido do ps ao rodar novamente, concluindo-se que a um processo também pode morrer, ou seja que pode se encerrar o processo.
