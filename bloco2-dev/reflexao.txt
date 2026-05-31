@@ -9,7 +9,15 @@
 # No shell moderno, qual mecanismo cumpre papel equivalente?
 # Dê um exemplo concreto do que você usou nesta atividade.
 
-Resposta:
+Resposta: O mecanismo equivalente no shell moderno é o redirecionamento 
+e o pipe (|). Assim como o JCL associava dispositivos e fluxos de dados 
+a um trabalho, o shell conecta a saída de um programa à entrada de outro. 
+Um exemplo concreto usado nesta atividade foi:
+
+ps aux | wc -l
+
+Onde a saída do ps aux (lista de processos) foi redirecionada via pipe 
+para o wc -l, que contou as linhas — resultado: 23 processos em execução.
 
 
 # ─────────────────────────────────────────────────────
@@ -21,11 +29,22 @@ Resposta:
 #    papel? Como o make sabe que não precisa recompilar um arquivo
 #    que não mudou?
 
-Resposta 1:
+Resposta 1: O make verifica os timestamps (data de modificação) dos arquivos. 
+Se o arquivo fonte (.c) não foi modificado depois do objeto (.o), o make 
+não recompila. Assim como o monitor histórico verificava a conclusão de 
+cada job antes de despachar o próximo, o make só executa uma regra se 
+suas dependências forem mais recentes que o alvo
 
 
 # 2. O monitor unificava "supervisor, carregador e rotinas de I/O
 #    sob uma interface textual". O que o Makefile unifica no fluxo
 #    de desenvolvimento moderno?
 
-Resposta 2:
+Resposta 2: O Makefile unifica todo o fluxo de desenvolvimento: 
+compilação, ligação e limpeza de arquivos temporários — tudo numa 
+interface textual única, assim como o monitor unificava supervisor, 
+carregador e rotinas de I/O.
+
+Questão de síntese: O mecanismo equivalente ao // ASSIGN do JCL é o 
+pipe (|) e o redirecionamento (> e <). Exemplo usado nesta atividade:
+cat /proc/meminfo | grep -E "MemTotal|MemFree" > memoria.txt
