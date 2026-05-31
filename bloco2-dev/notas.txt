@@ -5,8 +5,8 @@
 # FASE 1 — Pré-processador (gcc -E)
 # Quantas linhas tem soma.i? O que o pré-processador expandiu?
 
-Linhas em soma.i:
-Observação:
+Linhas em soma.i: 757
+Observação: O pré-processador expandiu o #include <stdio.h> — o arquivo original tinha apenas ~10 linhas, mas após a expansão ficou com 757 linhas. Isso acontece porque o #include copia todo o conteúdo do arquivo stdio.h (declarações de funções, tipos e macros da biblioteca padrão) diretamente no código.
 
 
 # FASE 2 — Assembly (gcc -S)
@@ -14,8 +14,22 @@ Observação:
 # interessantes e explique o que cada uma faz.
 
 Trecho de soma.s:
+addi sp,sp,-32       
+sd   s0,24(sp)       
+li   a1,5            
+li   a0,7            
+call soma            
+call printf          
+jr   ra
 
-Explicação:
+Explicação: 
+addi sp,sp,-32 — reserva 32 bytes na pilha para a função
+sd s0,24(sp) — salva o registrador s0 na pilha (preserva o contexto)
+li a1,5 — carrega o valor 5 no registrador a1 (segundo argumento de soma)
+li a0,7 — carrega o valor 7 no registrador a0 (primeiro argumento de soma)
+call soma — chama a função soma
+call printf — chama o printf para imprimir o resultado
+jr ra — retorna da função (jump para o endereço de retorno)
 
 
 # FASE 3 — Código objeto (gcc -c)
@@ -23,20 +37,26 @@ Explicação:
 
 file soma.o:
 
-# Cole a saída de: nm soma.o
+soma.o: ELF 64-bit LSB relocatable, UCB RISC-V, version 1 (SYSV), not stripped
 
 nm soma.o:
 
-# Quais símbolos aparecem? O que significa o marcador "U" ao lado
-# de printf?
+0000000000000000 r .LC0
+0000000000000028 T main
+                 U printf
+0000000000000000 T soma
 
 Observação sobre nm:
-
+T soma — a função soma está definida neste arquivo (T = Text, seção de código)
+T main — a função main também está definida aqui
+U printf — o printf está indefinido (U = Undefined), ou seja, foi usado no código mas não foi definido aqui — é da biblioteca padrão do C. O ligador será responsável por encontrar e conectar essa função na próxima fase
+r .LC0 — é a string "%d\n" guardada na seção de dados somente leitura
 
 # FASE 4 — Ligação (gcc soma.o -o soma)
 # O que mudou após a ligação? Execute ./soma e registre a saída.
 
-Saída de ./soma:
+Saída de ./soma: 12
+Após a ligação, o ligador resolveu o símbolo U printf buscando ele na biblioteca padrão do C (libc), e gerou o executável final soma que rodou corretamente.
 
 
 # QUESTÕES DE SÍNTESE
@@ -45,10 +65,10 @@ Saída de ./soma:
 #    apresentação esse mesmo problema apareceu? O que o ligador
 #    faz com esse símbolo?
 
-Resposta 1:
+Resposta 1: O ligador pega o símbolo printf marcado como U (Undefined) no soma.o e encontra a definição dele dentro da biblioteca padrão do C (libc), resolvendo a referência e tornando o programa executável completo.
 
 
 # 2. Compare soma.i com soma.s: qual das duas saídas é análoga
 #    ao "código objeto" do montador histórico? Justifique.
 
-Resposta 2:
+Resposta 2: O arquivo soma.s (assembly) é o análogo ao "código objeto" do montador histórico, pois é a saída do compilador em linguagem de baixo nível antes de virar binário. Porém, o arquivo que o computador realmente executa é o soma — o executável final gerado na Fase 4, após o ligador resolver todos os símbolos.
